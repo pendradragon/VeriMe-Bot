@@ -1,5 +1,7 @@
 require "ruby_lsp/requests/code_actions"
 
-#imports for the bots itself 
 require 'discordrb'
-require_relative 'lib/commands/GlobalVariables'
+
+#custom imports
+require_relative 'lib/config/GlobalVariables'
+require_relative 'lib/config/commands'
