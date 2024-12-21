@@ -1,0 +1,1 @@
+from base_variables_config import min_age, set_min, get_min_age
