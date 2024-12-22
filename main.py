@@ -42,6 +42,14 @@ async def setage(ctx, age: int):
             else:
                     await ctx.send("You lack the permissions to run this command.", ephemeral = True)
 
+@bot.slash_command(name = "setchannel", description = "Set the logging channel where the user records are kept. \nFor user privacy, this should be a moderator-only viewable channel.")
+async def setchannel(ctx):
+        if MOD_ROLE_ID in [role.id for role in ctx.authors.roles]:
+                response = set_log_channel(ctx.channel.id)
+                await ctx.send(response)
+
+        else:
+                await ctx.send("You lack the permissions to run this command.", ephemeral = True)
 
 #starting the bot
 bot.run(TOKEN)
