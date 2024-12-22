@@ -9,5 +9,7 @@ def set_log_channel(channel_id):
     global log_channel_id
     log_channel_id = channel_id
 
+    return(f"The log channel was set to {log_channel_id}.")
+
 def get_log_channel(): #for debugging bc I feel like I'm going to fuck this up
     return log_channel_id
