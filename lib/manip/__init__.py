@@ -1,1 +1,1 @@
-from configs import min_age
+from configs import min_age, min_days
