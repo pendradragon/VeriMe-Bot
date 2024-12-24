@@ -1,0 +1,1 @@
+from configs import min_age
