@@ -11,6 +11,7 @@ from lib.configs import log_channel_id, set_log_channel, get_log_channel
 
 TOKEN = os.getenv("TOKEN")
 MOD_ROLE_ID = os.getenv("ROLE_ID")
+MEMBER_ROLE_ID = os.getenv("MEMBERS_ROLE_ID")
 
 intents = discord.Intents.default()
 intents.message_content = True #For accessing message content
