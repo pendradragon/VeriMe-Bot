@@ -1,6 +1,7 @@
 #global variables 
 
 min_age = 18 #default
+min_days = 0 #default
 
 def set_min(age):
     global min_age
