@@ -57,7 +57,21 @@ async def setage(interaction: discord.Interaction, age: int):
                 response = set_min(age)
                 await interaction.response.send_message(response)
         else: #if the user does not have the correct permissions
-                await interaction.response.send_message("You lack the permissions to send this command.", ephemeral= True)
+                await interaction.response.send_message("You lack the necessary permissions to send this command.", ephemeral= True)
+
+@bot.tree.command(name = "setchannel", description="Set the logging channel where user records are kept as the current channel.")
+async def setchannel(interaction: discord.Interaction):
+        """
+        This channel should be one only moderators have access to as it contains information about all users who have verified themselves with the bot
+
+        In the name of security, once again, this command, by default, is only able to be run by moderators of the creator's server
+        """
+
+        if MOD_ROLE_ID in [role.id for role in interaction.user.roles]:
+                response = set_log_channel(interaction.channel_id)
+                await interaction.response.send_message(response)
+        else:
+                await interaction.response.send_message("You lack the necessary permission to send this command.", ephemeral= True)
 
 #commands that can be used by any user
 
