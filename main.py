@@ -37,30 +37,30 @@ async def on_ready():
                 print(f"Failed to sync commands: {e}.")
 
 #Moderator only commands
-@bot.slash_command(name = "setage", description = "Set the global age variable -- used to compare users birthdays to.")
-async def setage(ctx, age: int):
-            """
-            This command should only be run by moderators
-            To prevent from improper use cases of the bot the role ID is unique to the 'Mods' role in my server
+#setage
+@bot.tree.command(name = "setage", description = "Set the global age variable -- used to compare users' birthdays to.")
+@app_commands.describe(age = "The minimum age to verify against.")
+async def setage(interaction: discord.Interaction, age: int):
+        """
+        This command should only be able to be executed by moderators
 
-            To prevent from abuse of duplicate IDs (if that's even a thing on Discord), the role ID is saved in a separate file
-            """
+        Due to the nature of the site and some of its users, this bot is not going to work for servers other than my own
+            To prevent improper use, the only role ID that are going to be able to implement "mods only" commands are the only ones who have the "Mods" role in my server
 
-            if MOD_ROLE_ID in [role.id for role in ctx.authors.roles]:
-                    response = set_min(age)
-                    await ctx.send(response)
+        To prevent from abuse of same role IDs (if that is possible on this platform) all of the role IDs used to implement this bot's functionality have been recorded and saved in a separate protected file
 
-            else:
-                    await ctx.send("You lack the permissions to run this command.", ephemeral = True)
+        This bot is merely a personal project for the creator's server. Improper use and potential harm are not the fault of any of the bot's creators. 
+            Any misuse of the bot should be reported via GitHub's "Issues" tab. More security measures will be taken if needed
+        """
 
-@bot.slash_command(name = "setchannel", description = "Set the logging channel where the user records are kept. \nFor user privacy, this should be a moderator-only viewable channel.")
-async def setchannel(ctx):
-        if MOD_ROLE_ID in [role.id for role in ctx.authors.roles]:
-                response = set_log_channel(ctx.channel.id)
-                await ctx.send(response)
+        if MOD_ROLE_ID in [role.id for role in interaction.user.roles]:
+                response = set_min(age)
+                await interaction.response.send_message(response)
+        else: #if the user does not have the correct permissions
+                await interaction.response.send_message("You lack the permissions to send this command.", ephemeral= True)
 
-        else:
-                await ctx.send("You lack the permissions to run this command.", ephemeral = True)
+#commands that can be used by any user
+
 
 #starting the bot
 bot.run(TOKEN)
