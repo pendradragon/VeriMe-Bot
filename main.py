@@ -5,9 +5,11 @@ import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 
+from datetime import datetime, timedelta
+
 #library imports 
 #configs directory
-from lib.configs import min_age, set_min, get_min_age
+from lib.configs import min_age, min_days, set_min, get_min_age
 from lib.configs import log_channel_id, set_log_channel, get_log_channel
 #manip directory
 from lib.manip import date_checker
@@ -20,7 +22,6 @@ intents = discord.Intents.default()
 intents.message_content = True #For accessing message content
 intents.dm_messages = True #sending the desired user a DM
 intents.guild_messages = True #Sending messages in channels (required to keep logs)
-intents.guild = True
 intents.members = True #to see when a new person joins
 
 bot = commands.Bot(command_prefix='/', intents=intents)
@@ -74,7 +75,38 @@ async def setchannel(interaction: discord.Interaction):
                 await interaction.response.send_message("You lack the necessary permission to send this command.", ephemeral= True)
 
 #commands that can be used by any user
+#user verification command
+@bot.tree.command(name="verifyme", description="Verify your age to join the rest of the server.")
+async def verifyme(interaction: discord.Interaction):
+        #server message prompt
+        await interaction.response.send_message("Check your DMs for further instructions.", ephemeral=True)
 
+        try: 
+                await interaction.user.send("Please provide your date of birth in YYYY-MM-DD format.")
+
+                #DM security silliness
+                def check_dm(msg):
+                        return msg.author == interaction.user and isinstance(msg.channel, msg.DMChannel)
+                      
+                msg = await bot.wait_for("message", check=check_dm, timeout=1440) #give the user 24 hrs to respond
+                dob = msg.content
+                
+                if date_checker(dob): #if the user is old enough to be apart of the server
+                    #Give them the members role
+                    guild = interaction.guild
+                    role = guild.get_role(MEMBER_ROLE_ID)
+
+                    if role:
+                            member = guild.get_member(interaction.user.id)
+                            await member.add_roles(role)
+                        
+                    #Successful verfication logging 
+                    logging_channel = guild.get_channel(log_channel_id)
+                    if logging_channel:
+                            age = datetime.now() - datetime.strptime(dob, "%Y-%m-%d")
+                            age_years = age.days // 365 
+                            #logging message
+                            await logging_channel.send()
 
 #starting the bot
 bot.run(TOKEN)
