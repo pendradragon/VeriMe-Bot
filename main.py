@@ -104,9 +104,34 @@ async def verifyme(interaction: discord.Interaction):
                     logging_channel = guild.get_channel(log_channel_id)
                     if logging_channel:
                             age = datetime.now() - datetime.strptime(dob, "%Y-%m-%d")
-                            age_years = age.days // 365 
+                            age_years = age.days // 365 #keeping the exact DOB a secret -- not even mods need access to that info
+
                             #logging message
-                            await logging_channel.send()
+                            await logging_channel.send(f"User {interaction.user.name} (ID: {interaction.user.id}) verified their age as {age_years} years.")
+
+                    #sending the user a confirmation of verification
+                    await interaction.user.send("Verification complete! Enjoy your time in the server!")
+                
+                else: #user failed the verification
+                    await interaction.user.send("Verification failed.")
+
+                    #kicking the user from the server
+                    await interaction.guild.kick(user=interaction.user, reason="Failed age verification. You are too young to be a member of this server.")
+
+                    #failed verfication logging message
+                    logging_channel = interaction.guild.get_channel(log_channel_id)
+                    if logging_channel:
+                                await logging_channel.send(f"User: {interaction.user.name} (ID: {interaction.user.id}) did not meet the age requirement.") #mods to not need to know the real age of the user
+
+        except discord.Forbidden:
+                await interaction.response.send_message("A message could not be sent. Please ensure your privacy settings allow DMs. Please try again after changes are made to your settings. If errors continue, message administrative staff.", ephemeral=True)
+            
+        except ValueError: #if the date is put in the wrong format
+                await interaction.user.send("Invalid date format. Please try again using YYYY-MM-DD.")
+        
+        except TimeoutError: #if the user does not send a message within 24 hours
+                await interaction.user.send("You did not verify in 24 hours. Please attempt to verify again using /verifyme . If the error persists, please contact administrative staff.")
+
 
 #starting the bot
 bot.run(TOKEN)
