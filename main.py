@@ -15,8 +15,18 @@ from lib.configs import log_channel_id, set_log_channel, get_log_channel
 from lib.manip import date_checker
 
 TOKEN = os.getenv("TOKEN")
+"""
+Given the nature of the platform and its users, to prevent improper use of this bot
+        All role and channel IDs are those from the bot owner's server
+        To avoid the possibility of dupilcate IDs and that possibilty being exploited, all IDs are saved in a file not uploaded to GitHub
+"""
 MOD_ROLE_ID = os.getenv("ROLE_ID")
 MEMBER_ROLE_ID = os.getenv("MEMBERS_ROLE_ID")
+WELCOME_CHANNEL_ID = os.getenv("WELCOME_CHANNEL")
+UNVERIFIED_CHANNEL_ID = os.getenv("UNVERIFIED_CHANNEL")
+RULES_CHANNEL_ID = os.getenv("RULES_CHANNEL")
+ROLES_CHANNEL_ID = os.getenv("ROLE_ID")
+RP_RULES_CHANNEL_ID = os.getenv("RP_RULES_CHANNELS")
 
 intents = discord.Intents.default()
 intents.message_content = True #For accessing message content
@@ -132,6 +142,27 @@ async def verifyme(interaction: discord.Interaction):
         except TimeoutError: #if the user does not send a message within 24 hours
                 await interaction.user.send("You did not verify in 24 hours. Please attempt to verify again using /verifyme . If the error persists, please contact administrative staff.")
 
+
+#Welcome message this tells the user to verify using the bot
+@bot.event
+async def on_member_join(member):
+        welcome_channel = bot.get_channel(WELCOME_CHANNEL_ID)  
+        if welcome_channel is not None:
+                message = discord.Embed(
+                        title = "≪ ◦ Welcome to Garreg Mach! ◦ ≫",
+                        description=(
+                                f"**Hello {member.mention}, welcome to (18+) Fire Emblem: 3 Houses College AU!!**\n\n"
+                                f"To get started, read the server rules in <#{RULES_CHANNEL_ID}>.\n"
+                                f"After reading the rules, we ask that you verify yourself using the '/verifyme' command in <#{UNVERIFIED_CHANNEL_ID}> to ensure the server remains a safe and secure place for everyone!\n"
+                                "If you encounter any issues during the verification process, please feel free to reach out to administrative staff with any questions.\n\n"
+
+                                f"❧ Once verified, pick up some roles in <#{ROLES_CHANNEL_ID}>."
+                                f"❧ Looking for roleplay? Check out our roleplay rules in <#{RP_RULES_CHANNEL_ID}>."
+                        ), 
+                        color = discord.Color.blue()
+                )
+
+                await welcome_channel.send(message)      
 
 #starting the bot
 bot.run(TOKEN)
