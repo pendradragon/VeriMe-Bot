@@ -5,14 +5,14 @@
 
 version: 2
 updates:
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    open-pull-request-limit: 0
-      
-  - package-ecosystem: "pip" # For installing the requirements
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
-    open-pull-request-limit: 0
+  - package-ecosystem: "pip"
+  directory: "/"
+  schedule:
+    interval: "weekly"
+  allow:
+    - dependency-name: "discord.py"
+  open-pull-requests-limit: 0
+  - package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: "weekly"
