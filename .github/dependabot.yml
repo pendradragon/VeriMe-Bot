@@ -12,7 +12,7 @@ updates:
   allow:
     - dependency-name: "discord.py"
   open-pull-requests-limit: 0
-  - package-ecosystem: "github-actions"
+  - package-ecosystem: "githubactions"
   directory: "/"
   schedule:
     interval: "weekly"
