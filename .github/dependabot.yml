@@ -16,11 +16,3 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-request-limit: 0
-
-    #python version updates
-    - package-ecosystem: "github-actions"
-      directory: "/"
-      schedule: 
-        interval: "weekly"
-      allow:
-        dependency-type: "direct"
