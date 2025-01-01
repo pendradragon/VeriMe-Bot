@@ -147,6 +147,12 @@ async def verifyme(interaction: discord.Interaction):
 @bot.event
 async def on_member_join(member):
         welcome_channel = bot.get_channel(WELCOME_CHANNEL_ID)  
+
+        #accessing the gif file for the welcome message (Claude)
+        gif_path = "./res/claude-von-reigan.gif"
+        with open(gif_path, "rb") as gif_file:
+                gif = discord.File(gif_file, filename="claude-von-reigan.gif")
+
         if welcome_channel is not None:
                 message = discord.Embed(
                         title = "≪ ◦ Welcome to Garreg Mach! ◦ ≫",
@@ -157,12 +163,13 @@ async def on_member_join(member):
                                 "If you encounter any issues during the verification process, please feel free to reach out to administrative staff with any questions.\n\n"
 
                                 f"❧ Once verified, pick up some roles in <#{ROLES_CHANNEL_ID}>."
-                                f"❧ Looking for roleplay? Check out our roleplay rules in <#{RP_RULES_CHANNEL_ID}>."
-                        ), 
-                        color = discord.Color.blue()
+                                f"❧ Looking for roleplay? Check out our roleplay rules in <#{RP_RULES_CHANNEL_ID}>."), 
+                        color = discord.Color.blurple()
                 )
 
-                await welcome_channel.send(message)      
+                message.set_image(url=f"attachment://claude-von-reigan.gif")
+
+                await welcome_channel.send(file=gif, embed=message)      
 
 #starting the bot
 bot.run(TOKEN)
