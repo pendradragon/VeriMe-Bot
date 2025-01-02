@@ -171,5 +171,15 @@ async def on_member_join(member):
 
                 await welcome_channel.send(file=gif, embed=message)      
 
+#for when members leave
+@bot.event
+async def on_memeber_remove(member):
+        channel = bot.get_channel(WELCOME_CHANNEL_ID)
+
+        #getting the gif that I want to use for this embed
+        gif_path = "./res/sothis.gif"
+        with open (gif_path, "rb") as gif_file:
+                gif = discord.File(gif_file, filename="sothis.gif")
+
 #starting the bot
 bot.run(TOKEN)
