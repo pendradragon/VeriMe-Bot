@@ -181,5 +181,20 @@ async def on_memeber_remove(member):
         with open (gif_path, "rb") as gif_file:
                 gif = discord.File(gif_file, filename="sothis.gif")
 
+        #the actual message to be sent
+        leave_message = discord.Embed(
+                title="Member left.",
+                description=f"{member.name} has left to be with the goddess...",
+                color=discord.Color.dark_blue()
+        )
+
+        leave_message.set_thumbnail(url=member.avatar.url if member.avatar else None)
+        leave_message.set_image(url=f"attachment://sothis.gif")
+        leave_message.add_field(name="User ID", value = member.id, inline=True)
+        leave_message.add_field(name="Total members", value = len(member.guild.members), inline=True)
+
+        await channel.send(file=gif, embed=leave_message)
+
+
 #starting the bot
 bot.run(TOKEN)
